@@ -5,9 +5,10 @@ from neo4j.exceptions import CypherError
 
 from .graph_builder import GraphBuilder
 from .gql_builder import GqlBuilder
-from neo4j.v1 import GraphDatabase
+from neo4j import GraphDatabase
 
-def load_qas(qa_yaml="./data/test_qs.yaml"):
+#def load_qas(qa_yaml="./data/test_qs.yaml"):
+def load_qas(qa_yaml="/home/yuzhi/Downloads/data/CLEVR/gqa-r0.yaml"):
     with open(qa_yaml, "r") as file:
         for qa in yaml.load_all(file):
             yield qa
@@ -27,9 +28,9 @@ def load_london():
 
 def answer_question(gqa):
 
-    question = gqa['question']
-    print(question['english'])
-    functional_question = question['functional']
+    question = gqa.question
+    print(question.english)
+    functional_question = question.functional
     gb = GqlBuilder(functional_question)
     print(functional_question)
     try:
@@ -53,7 +54,7 @@ def answer_question(gqa):
     # print(result)
     try:
 
-        answer = gqa['answer']
+        answer = gqa.answer
         print(result)
         if isinstance(answer, list):
             assert set(result[0]) == set(answer) or answer == [result[0]], f"{result} != {answer}"
